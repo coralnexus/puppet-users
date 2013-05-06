@@ -33,8 +33,5 @@ class users::default {
       $skel_profile_template = 'users/skel/debian.profile.erb'
       $skel_bashrc_template  = 'users/skel/debian.bashrc.erb'
     }
-    default: {
-      fail("The users module is not currently supported on ${::operatingsystem}")
-    }
   }
 }
