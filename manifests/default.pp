@@ -1,13 +1,6 @@
 
 class users::default {
 
-  /*$user_ensure               = 'present'
-  $user_alt_groups           = []
-  $user_allowed_ssh_key_type = 'rsa'
-  $user_ssh_key_type         = 'rsa'
-  $user_shell                = '/bin/bash'
-  $user_system               = false*/
-
   $common_aliases = {
     'cd..'    => 'cd ..',
     'ls'      => 'ls --color=auto',

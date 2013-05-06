@@ -23,6 +23,7 @@
 #   include users
 #
 class users inherits users::params {
+
   $base_name = $users::params::base_name
 
   #-----------------------------------------------------------------------------
