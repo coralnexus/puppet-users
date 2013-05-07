@@ -40,7 +40,7 @@ class users::params inherits users::default {
   $skel_aliases_file     = module_param('skel_aliases_file', "${skel_home_dir}/${aliases_file}")
 
   $root                  = module_param('root', 'root')
-  $root_name             = module_param('root_name', 'Root account')
+  $root_label            = module_param('root_label', 'Root account')
   $root_email            = module_param('root_email')
   $root_home_dir         = module_param('root_home_dir', '/root')
   $root_profile_template = module_param('root_profile_template')

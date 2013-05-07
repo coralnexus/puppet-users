@@ -53,6 +53,8 @@ class users inherits users::params {
   #---
 
   users::conf { $users::params::root:
+    label            => $users::params::root_label,
+    email            => $users::params::root_email,
     home_dir         => $users::params::root_home_dir,
     profile_template => $users::params::root_profile_template,
     bashrc_template  => $users::params::root_bashrc_template,
