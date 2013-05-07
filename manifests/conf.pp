@@ -43,20 +43,24 @@ define users::conf (
       },
       profile => {
         path    => ensure($profile_file, "${user_dir}/${profile_file}"),
-        content => template($profile_template)
+        content => template($profile_template),
+        require => 'dir'
       },
       bashrc => {
         path    => ensure($bashrc_file, "${user_dir}/${bashrc_file}"),
         content => template($bashrc_template),
+        require => 'dir'
       },
       aliases => {
         path    => ensure($aliases_file, "${user_dir}/${aliases_file}"),
         content => render($alias_template, $aliases),
+        require => 'dir'
       },
       ssh_dir => {
-        path   => $user_ssh_dir,
-        ensure => directory,
-        mode   => $ssh_dir_mode,
+        path    => $user_ssh_dir,
+        ensure  => directory,
+        mode    => $ssh_dir_mode,
+        require => 'dir'
       },
       public_key => {
         path    => ensure($public_ssh_key, "${user_ssh_dir}/id_${ssh_key_type}.pub"),
