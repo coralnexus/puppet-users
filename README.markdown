@@ -1,4 +1,4 @@
-## coraltech-sudo module
+## coralnexus-user module
 
 ## Overview
 
