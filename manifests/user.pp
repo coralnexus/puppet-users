@@ -36,7 +36,7 @@ define users::user(
 
 ) {
   $base_name       = $users::params::base_name
-  $definition_name = "${base_name}_user_${user}"
+  $definition_name = name("${base_name}_user_${user}")
 
   $user_dir     = ensure($home_dir, $home_dir, "${users::params::home_dir}/${user}")
   $user_ssh_dir = ensure($ssh_dir, "${user_dir}/${ssh_dir}")
@@ -54,6 +54,26 @@ define users::user(
       }
     },
     require => Coral::File["${base_name}_skel"]
+  }
+
+  #---
+
+  coral::user { $definition_name:
+    resources => {
+      primary => {
+        name       => $user,
+        password   => $password,
+        gid        => $group,
+        groups     => $alt_groups,
+        comment    => $label,
+        ensure     => $ensure,
+        home       => $user_dir,
+        managehome => true,
+        shell      => $shell,
+        system     => $system,
+      }
+    },
+    require => Coral::Group[$definition_name]
   }
 
   #---
@@ -81,7 +101,7 @@ define users::user(
     umask                => $umask,
     use_color            => $use_color,
     prompt               => $prompt,
-    require              => Coral::Group[$definition_name]
+    require              => Coral::User[$definition_name]
   }
 
   #---
@@ -89,7 +109,7 @@ define users::user(
   coral::ssh_authorized_key { $definition_name:
     resources => {
       primary => {
-        name    => "${user}-${allowed_ssh_key_type}-key",
+        name    => ensure($allowed_ssh_key, "${user}-${allowed_ssh_key_type}-key"),
         ensure  => 'present',
         key     => $allowed_ssh_key,
         type    => $allowed_ssh_key_type,
@@ -97,26 +117,6 @@ define users::user(
       }
     },
     defaults => { user => $user },
-    require => Users::Conf[$user]
-  }
-
-  #---
-
-  coral::user { $definition_name:
-    resources => {
-      primary => {
-        name       => $user,
-        password   => $password,
-        gid        => $group,
-        groups     => $alt_groups,
-        comment    => $label,
-        ensure     => $ensure,
-        home       => $user_dir,
-        managehome => true,
-        shell      => $shell,
-        system     => $system,
-      }
-    },
     require => Users::Conf[$user]
   }
 }

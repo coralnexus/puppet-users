@@ -31,7 +31,6 @@ class users::params inherits users::default {
   $private_ssh_key_mode = module_param('private_ssh_key_mode', '0600')
   $default_ssh_key_type = module_param('default_ssh_key_type', 'rsa')
 
-
   $skel_home_dir         = module_param('skel_home_dir', '/etc/skel')
   $skel_profile_file     = module_param('skel_profile_file', "${skel_home_dir}/${profile_file}")
   $skel_profile_template = module_param('skel_profile_template')

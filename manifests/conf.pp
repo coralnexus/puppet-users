@@ -27,7 +27,7 @@ define users::conf (
 
 ) {
   $base_name       = $users::params::base_name
-  $definition_name = "${base_name}_conf_${name}"
+  $definition_name = name("${base_name}_conf_${name}")
 
   $user_dir     = ensure($home_dir, $home_dir, "${users::params::home_dir}/${user}")
   $user_ssh_dir = ensure($ssh_dir, "${user_dir}/${ssh_dir}")
