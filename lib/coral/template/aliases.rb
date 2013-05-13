@@ -7,9 +7,9 @@ class Aliases < Environment
    
   def render(input)
     set(:export, true)
-    set(:export_text, 'alias')
-    set(:quote, true)            
-    return super.render(input)
+    set(:export_text, 'alias ')
+    set(:quote, true) 
+    return super(input)
   end
 end
 end
