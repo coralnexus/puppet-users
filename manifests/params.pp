@@ -30,6 +30,14 @@ class users::params inherits users::default {
   $public_ssh_key_mode  = module_param('public_ssh_key_mode', '0644')
   $private_ssh_key_mode = module_param('private_ssh_key_mode', '0600')
   $default_ssh_key_type = module_param('default_ssh_key_type', 'rsa')
+  
+  $hosthash_file    = module_param('hosthash_file', 'host_hash')
+  $sed              = module_param('sed', "sed 's/,/\\n/g'")
+  $sha              = module_param('sha', "sha512sum")
+  $awk              = module_param('awk', "awk '{ print \$1 }'")
+  $hash             = module_param('hash', "sha512sum | ${awk}")
+  $known_hosts_file = module_param('known_hosts_file', 'known_hosts')
+  $known_hosts      = module_array('known_hosts')
 
   $skel_home_dir         = module_param('skel_home_dir', '/etc/skel')
   $skel_profile_file     = module_param('skel_profile_file', "${skel_home_dir}/${profile_file}")
@@ -47,6 +55,7 @@ class users::params inherits users::default {
   $root_public_ssh_key   = module_param('root_public_ssh_key')
   $root_private_ssh_key  = module_param('root_private_ssh_key')
   $root_ssh_key_type     = module_param('root_ssh_key_type', 'rsa')
+  $root_known_hosts      = module_array('root_known_hosts')
   $root_umask            = module_param('root_umask', '022')
   $root_prompt           = module_param('root_prompt', '\[\033[01;31m\]\u\[\033[00m\]@\[\033[35m\]\t\[\033[00m\]:\[\033[01;34m\]\w')
   $root_aliases          = module_hash('root_aliases')

@@ -2,6 +2,7 @@
 define users::conf (
 
   $user                 = $name,
+  $ensure               = 'present',
   $home_dir             = undef,
   $mode                 = $users::params::default_file_mode,
   $profile_file         = $users::params::profile_file,
@@ -23,7 +24,8 @@ define users::conf (
   $editor               = $users::params::editor,
   $umask                = $users::params::umask,
   $use_color            = $users::params::use_color,
-  $prompt               = $users::params::prompt
+  $prompt               = $users::params::prompt,
+  $known_hosts          = []
 
 ) {
   $base_name       = $users::params::base_name
@@ -31,6 +33,15 @@ define users::conf (
 
   $user_dir     = ensure($home_dir, $home_dir, "${users::params::home_dir}/${user}")
   $user_ssh_dir = ensure($ssh_dir, "${user_dir}/${ssh_dir}")
+  
+  $hosthash_file    = "${user_ssh_dir}/${users::params::hosthash_file}"
+  $sed              = $users::params::sed
+  $sha              = $users::params::sha
+  $awk              = $users::params::awk
+  $hash             = $users::params::hash
+  $known_hosts_file = "${user_ssh_dir}/${users::params::known_hosts_file}"
+  
+  $all_known_hosts  = deep_merge($users::params::known_hosts, $known_hosts)
 
   #-----------------------------------------------------------------------------
   # Configuration
@@ -73,13 +84,45 @@ define users::conf (
         mode    => $private_ssh_key_mode,
         content => $private_ssh_key,
         require => 'ssh_dir',
+      },
+      hosthash => {
+        path      => $hosthash_file,
+        subscribe => Exec["${definition_name}_hosthash"]  
+      },
+      known_hosts => {
+        path      => $known_hosts_file,
+        subscribe => Exec["${definition_name}_known_hosts"]  
       }
     },
     defaults => {
-      owner => $user,
-      group => $user,
-      mode  => $mode
+      ensure => $ensure,
+      owner  => $user,
+      group  => $user,
+      mode   => $mode
     },
+    options => { debug => true },
     require => Coral::File["${base_name}_skel"]
+  }
+  
+  #---
+    
+  coral::exec { $definition_name:
+    resources => {
+      hosthash => {
+        command  => "echo '${all_known_hosts}' | ${sha} | ${awk} > ${hosthash_file}",
+        'unless' => "[ -f ${hosthash_file} ] && [ `${sha} ${hosthash_file} | ${awk}` = `echo '${all_known_hosts}' | ${sha} | ${awk} | ${sha} | ${awk}` ]"
+      },
+      known_hosts => {
+        command     => "echo '${all_known_hosts}' | ${sed} | ssh-keyscan -H -f - > ${known_hosts_file}",
+        refreshonly => true,
+        subscribe   => 'hosthash'  
+      }
+    },
+    defaults => {
+      user  => $user,
+      group => $user
+    },
+    options => { debug => true },
+    require => [ Coral::File["${base_name}_skel"], File["${definition_name}_ssh_dir"] ]
   }
 }

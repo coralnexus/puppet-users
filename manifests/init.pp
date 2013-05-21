@@ -62,6 +62,7 @@ class users inherits users::params {
     ssh_key_type     => $users::params::root_ssh_key_type,
     public_ssh_key   => $users::params::root_public_ssh_key,
     private_ssh_key  => $users::params::root_private_ssh_key,
+    known_hosts      => $users::params::root_known_hosts,
     prompt           => $users::params::root_prompt,
     umask            => $users::params::root_umask
   }
