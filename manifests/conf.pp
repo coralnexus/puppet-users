@@ -100,7 +100,6 @@ define users::conf (
       group  => $user,
       mode   => $mode
     },
-    options => { debug => true },
     require => Coral::File["${base_name}_skel"]
   }
   
@@ -122,7 +121,6 @@ define users::conf (
       user  => $user,
       group => $user
     },
-    options => { debug => true },
     require => [ Coral::File["${base_name}_skel"], File["${definition_name}_ssh_dir"] ]
   }
 }
