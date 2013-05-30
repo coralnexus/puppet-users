@@ -10,7 +10,7 @@
 HISTCONTROL=ignoredups:ignorespace
 
 # Default editor
-export EDITOR=<%= editor %>
+export EDITOR=<%= @editor %>
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -39,7 +39,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-force_color_prompt=<%= use_color %>
+force_color_prompt=<%= @use_color %>
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -56,12 +56,12 @@ if [ "$color_prompt" = yes ]; then
     if [ ! -z `which git` ]
     then
       export GIT_PS1_SHOWDIRTYSTATE=1      
-      PS1='${debian_chroot:+($debian_chroot)}<%= prompt -%>\[\033[01;33m\]$(__git_ps1)\[\033[00m\]\$ '
+      PS1='${debian_chroot:+($debian_chroot)}<%= @prompt -%>\[\033[01;33m\]$(__git_ps1)\[\033[00m\]\$ '
     else
-      PS1='${debian_chroot:+($debian_chroot)}<%= prompt -%>\[\033[00m\]\$ '
+      PS1='${debian_chroot:+($debian_chroot)}<%= @prompt -%>\[\033[00m\]\$ '
     fi
 else
-    PS1='${debian_chroot:+($debian_chroot)}<%= prompt.empty? ? '\u@\h:\w' : prompt -%>\$ '
+    PS1='${debian_chroot:+($debian_chroot)}<%= @prompt.empty? ? '\u@\h:\w' : @prompt -%>\$ '
 fi
 unset color_prompt force_color_prompt
 
