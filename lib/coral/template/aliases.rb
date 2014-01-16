@@ -2,10 +2,11 @@
 module Coral
 module Template
 class Aliases < Environment
+  
   #-----------------------------------------------------------------------------
   # Renderers  
    
-  def render(input)
+  def render_processed(input)
     set(:export, true)
     set(:export_text, 'alias ')
     set(:quote, true) 
