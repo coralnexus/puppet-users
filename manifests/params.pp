@@ -22,7 +22,7 @@ class users::params inherits users::default {
   $profile_file   = module_param('profile_file', '.profile')
   $bashrc_file    = module_param('bashrc_file', '.bashrc')
   $aliases_file   = module_param('aliases_file', '.bash_aliases')
-  $alias_template = module_param('alias_template', 'Aliases')
+  $alias_template = module_param('alias_template', 'aliases')
   $common_aliases = module_hash('common_aliases')
 
   $ssh_dir              = module_param('ssh_dir', '.ssh')
@@ -30,7 +30,7 @@ class users::params inherits users::default {
   $public_ssh_key_mode  = module_param('public_ssh_key_mode', '0644')
   $private_ssh_key_mode = module_param('private_ssh_key_mode', '0600')
   $default_ssh_key_type = module_param('default_ssh_key_type', 'rsa')
-  
+
   $hosthash_file    = module_param('hosthash_file', 'host_hash')
   $sed              = module_param('sed', "sed 's/,/\\n/g'")
   $sha              = module_param('sha', "sha512sum")
