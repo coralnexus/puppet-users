@@ -2,7 +2,7 @@
 #
 #   This module configures user environments and manages users.
 #
-#   Adrian Webb <adrian.webb@coraltech.net>
+#   Adrian Webb <adrian.webb@coralnexus.com>
 #   2012-05-22
 #
 #   Tested platforms:
@@ -29,7 +29,7 @@ class users inherits users::params {
   #-----------------------------------------------------------------------------
   # Configuration
 
-  coral::file { "${base_name}_skel":
+  corl::file { "${base_name}_skel":
     resources => {
       profile => {
         path    => $users::params::skel_profile_file,
@@ -70,11 +70,11 @@ class users inherits users::params {
   #-----------------------------------------------------------------------------
   # Actions
 
-  coral::exec { $base_name: }
+  corl::exec { $base_name: }
 
   #-----------------------------------------------------------------------------
   # Resources
 
-  coral_resources('users::conf', "${base_name}::conf", "${base_name}::conf_defaults")
-  coral_resources('users::user', "${base_name}::user", "${base_name}::user_defaults")
+  corl_resources('users::conf', "${base_name}::conf", "${base_name}::conf_defaults")
+  corl_resources('users::user', "${base_name}::user", "${base_name}::user_defaults")
 }

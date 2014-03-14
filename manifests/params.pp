@@ -1,5 +1,5 @@
 
-class users::params inherits users::default {
+class users::params {
 
   $base_name = 'users'
 

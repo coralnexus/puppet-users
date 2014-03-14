@@ -1,5 +1,5 @@
-## coralnexus-user module
+### coralnexus-users module
 
-## Overview
+### Overview
 
 This module configures user environments and manages users.

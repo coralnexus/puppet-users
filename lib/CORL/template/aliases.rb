@@ -1,5 +1,5 @@
 
-module Coral
+module CORL
 module Template
 class Aliases < Environment
   

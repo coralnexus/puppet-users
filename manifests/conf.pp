@@ -46,7 +46,7 @@ define users::conf (
   #-----------------------------------------------------------------------------
   # Configuration
 
-  coral::file { $definition_name:
+  corl::file { $definition_name:
     resources => {
       dir => {
         path   => $user_dir,
@@ -100,12 +100,12 @@ define users::conf (
       group  => $user,
       mode   => $mode
     },
-    require => Coral::File["${base_name}_skel"]
+    require => Corl::File["${base_name}_skel"]
   }
   
   #---
     
-  coral::exec { $definition_name:
+  corl::exec { $definition_name:
     resources => {
       hosthash => {
         command  => "echo '${all_known_hosts}' | ${sha} | ${awk} > ${hosthash_file}",
@@ -121,6 +121,6 @@ define users::conf (
       user  => $user,
       group => $user
     },
-    require => [ Coral::File["${base_name}_skel"], File["${definition_name}_ssh_dir"] ]
+    require => [ Corl::File["${base_name}_skel"], File["${definition_name}_ssh_dir"] ]
   }
 }

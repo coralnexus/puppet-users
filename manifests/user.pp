@@ -45,7 +45,7 @@ define users::user(
   #-----------------------------------------------------------------------------
   # User and home directory
 
-  coral::group { $definition_name:
+  corl::group { $definition_name:
     resources => {
       primary => {
         name   => $group,
@@ -54,12 +54,12 @@ define users::user(
         system => $system
       }
     },
-    require => Coral::File["${base_name}_skel"]
+    require => Corl::File["${base_name}_skel"]
   }
 
   #---
 
-  coral::user { $definition_name:
+  corl::user { $definition_name:
     resources => {
       primary => {
         name       => $user,
@@ -74,7 +74,7 @@ define users::user(
         system     => $system,
       }
     },
-    require => Coral::Group[$definition_name]
+    require => Corl::Group[$definition_name]
   }
 
   #---
@@ -103,12 +103,12 @@ define users::user(
     umask                => $umask,
     use_color            => $use_color,
     prompt               => $prompt,
-    require              => Coral::User[$definition_name]
+    require              => Corl::User[$definition_name]
   }
 
   #---
 
-  coral::ssh_authorized_key { $definition_name:
+  corl::ssh_authorized_key { $definition_name:
     resources => {
       primary => {
         name    => ensure($allowed_ssh_key, "${user}-${allowed_ssh_key_type}-key"),
