@@ -28,7 +28,7 @@ class users inherits users::params {
 
   #-----------------------------------------------------------------------------
   # Configuration
-
+  
   corl::file { "${base_name}_skel":
     resources => {
       profile => {

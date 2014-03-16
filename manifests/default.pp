@@ -21,7 +21,7 @@ class users::default {
       $root_profile_template = 'users/root/debian.profile.erb'
       $root_bashrc_template  = 'users/root/debian.bashrc.erb'
 
-      $root_aliases = deep_merge($common_aliases, {
+      $root_aliases = corl_merge($common_aliases, {
         'search'  => 'apt-cache search',
         'update'  => 'apt-get update',
         'install' => 'apt-get install',

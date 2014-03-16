@@ -41,7 +41,7 @@ define users::conf (
   $hash             = $users::params::hash
   $known_hosts_file = "${user_ssh_dir}/${users::params::known_hosts_file}"
   
-  $all_known_hosts  = deep_merge($users::params::known_hosts, $known_hosts)
+  $all_known_hosts  = corl_merge($users::params::known_hosts, $known_hosts)
 
   #-----------------------------------------------------------------------------
   # Configuration
