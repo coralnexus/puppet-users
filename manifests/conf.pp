@@ -25,6 +25,7 @@ define users::conf (
   $umask                = $users::params::umask,
   $use_color            = $users::params::use_color,
   $prompt               = $users::params::prompt,
+  $ssh_config           = $users::params::ssh_config,
   $known_hosts          = []
 
 ) {
@@ -33,6 +34,8 @@ define users::conf (
 
   $user_dir     = ensure($home_dir, $home_dir, "${users::params::home_dir}/${user}")
   $user_ssh_dir = ensure($ssh_dir, "${user_dir}/${ssh_dir}")
+  
+  $ssh_config_file = "${user_ssh_dir}/${users::params::ssh_config_file}"
   
   $hosthash_file    = "${user_ssh_dir}/${users::params::hosthash_file}"
   $sed              = $users::params::sed
@@ -73,17 +76,11 @@ define users::conf (
         mode    => $ssh_dir_mode,
         require => 'dir'
       },
-      public_key => {
-        path    => ensure($public_ssh_key, "${user_ssh_dir}/id_${ssh_key_type}.pub"),
-        mode    => $public_ssh_key_mode,
-        content => $public_ssh_key,
-        require => 'ssh_dir',
-      },
-      private_key => {
-        path    => ensure($private_ssh_key, "${user_ssh_dir}/id_${ssh_key_type}"),
-        mode    => $private_ssh_key_mode,
-        content => $private_ssh_key,
-        require => 'ssh_dir',
+      ssh_conf => {
+        path             => $ssh_config_file,
+        content          => $ssh_config,
+        content_template => $corl::params::ssh::config_template,
+        require          => [ Class['corl::params'], 'ssh_dir' ]
       },
       hosthash => {
         path      => $hosthash_file,
@@ -101,6 +98,52 @@ define users::conf (
       mode   => $mode
     },
     require => Corl::File["${base_name}_skel"]
+  }
+   
+  #---
+
+  corl::file { "${definition_name}_private_keys":
+    resources => {
+      primary => {
+        path    => ensure($private_ssh_key, "id_${ssh_key_type}"),
+        content => $private_ssh_key
+      }
+    },
+    defaults => {
+      ensure        => $ensure,
+      owner         => $user,
+      group         => $user,
+      mode          => $private_ssh_key_mode,
+      path_template => $users::params::prefix_template
+    },
+    options => {
+      normalize_path  => false,
+      template_prefix => "${user_ssh_dir}/"
+    },
+    require => File["${definition_name}_ssh_dir"]
+  }
+    
+  #---
+
+  corl::file { "${definition_name}_public_keys":
+    resources => {
+      primary => {
+        path    => ensure($public_ssh_key, "id_${ssh_key_type}.pub"),
+        content => $public_ssh_key
+      }
+    },
+    defaults => {
+      ensure        => $ensure,
+      owner         => $user,
+      group         => $user,
+      mode          => $public_ssh_key_mode,
+      path_template => $users::params::prefix_template
+    },
+    options => {
+      normalize_path  => false,
+      template_prefix => "${user_ssh_dir}/"
+    },
+    require => File["${definition_name}_ssh_dir"]
   }
   
   #---

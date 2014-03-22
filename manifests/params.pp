@@ -18,6 +18,7 @@ class users::params inherits users::default {
   #---
 
   $default_file_mode = module_param('default_file_mode', '0644')
+  $prefix_template   = module_param('prefix_template', 'wrapper')
 
   $profile_file   = module_param('profile_file', '.profile')
   $bashrc_file    = module_param('bashrc_file', '.bashrc')
@@ -30,6 +31,9 @@ class users::params inherits users::default {
   $public_ssh_key_mode  = module_param('public_ssh_key_mode', '0644')
   $private_ssh_key_mode = module_param('private_ssh_key_mode', '0600')
   $default_ssh_key_type = module_param('default_ssh_key_type', 'rsa')
+  
+  $ssh_config_file = module_param('ssh_config_file', 'config')  
+  $ssh_config      = module_hash('ssh_config')
 
   $hosthash_file    = module_param('hosthash_file', 'host_hash')
   $sed              = module_param('sed', "sed 's/,/\\n/g'")
