@@ -1,5 +1,5 @@
 
-module CORL
+module Nucleon
 module Template
 class Aliases < Environment
   
