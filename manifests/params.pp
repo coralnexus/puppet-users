@@ -1,6 +1,8 @@
 
 class users::params inherits users::default {
 
+  include corl::params::ssh
+
   $base_name = 'users'
 
   #---
@@ -31,8 +33,8 @@ class users::params inherits users::default {
   $public_ssh_key_mode  = module_param('public_ssh_key_mode', '0644')
   $private_ssh_key_mode = module_param('private_ssh_key_mode', '0600')
   $default_ssh_key_type = module_param('default_ssh_key_type', 'rsa')
-  
-  $ssh_config_file = module_param('ssh_config_file', 'config')  
+
+  $ssh_config_file = module_param('ssh_config_file', 'config')
   $ssh_config      = module_hash('ssh_config')
 
   $hosthash_file    = module_param('hosthash_file', 'host_hash')
