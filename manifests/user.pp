@@ -45,65 +45,69 @@ define users::user(
   #-----------------------------------------------------------------------------
   # User and home directory
 
-  corl::group { $definition_name:
-    resources => {
-      primary => {
-        name   => $group,
-        gid    => $gid,
-        ensure => $ensure,
-        system => $system
-      }
-    },
-    require => Corl::File["${base_name}_skel"]
+  if ! defined(Group[$group]) {
+    corl::group { $definition_name:
+      resources => {
+        primary => {
+          name   => $group,
+          gid    => $gid,
+          ensure => $ensure,
+          system => $system
+        }
+      },
+      require => Corl::File["${base_name}_skel"]
+    }
   }
 
   #---
 
-  corl::user { $definition_name:
-    resources => {
-      primary => {
-        name       => $user,
-        password   => $password,
-        gid        => $group,
-        groups     => $alt_groups,
-        comment    => $label,
-        ensure     => $ensure,
-        home       => $user_dir,
-        managehome => true,
-        shell      => $shell,
-        system     => $system,
-      }
-    },
-    require => Corl::Group[$definition_name]
-  }
+  if ! defined(User[$user]) and ! defined(Users::Conf[$user]) {
+    corl::user { $definition_name:
+      resources => {
+        primary => {
+          name       => $user,
+          password   => $password,
+          gid        => $group,
+          groups     => $alt_groups,
+          comment    => $label,
+          ensure     => $ensure,
+          home       => $user_dir,
+          managehome => true,
+          shell      => $shell,
+          system     => $system,
+        }
+      },
+      require => Corl::Group[$definition_name]
+    }
 
-  #---
+    #---
 
-  users::conf { $user:
-    home_dir             => $user_dir,
-    mode                 => $file_mode,
-    profile_file         => $profile_file,
-    profile_template     => $profile_template,
-    bashrc_file          => $bashrc_file,
-    bashrc_template      => $bashrc_template,
-    aliases_file         => $aliases_file,
-    alias_template       => $alias_template,
-    aliases              => $aliases,
-    ssh_dir              => $ssh_dir,
-    ssh_dir_mode         => $ssh_dir_mode,
-    ssh_key_type         => $ssh_key_type,
-    public_ssh_key_mode  => $public_ssh_key_mode,
-    public_ssh_key       => $public_ssh_key,
-    private_ssh_key_mode => $private_ssh_key_mode,
-    private_ssh_key      => $private_ssh_key,
-    known_hosts          => $known_hosts,
-    label                => $label,
-    email                => $email,
-    editor               => $editor,
-    umask                => $umask,
-    use_color            => $use_color,
-    prompt               => $prompt,
-    require              => Corl::User[$definition_name]
+    users::conf { $user:
+      home_dir             => $user_dir,
+      mode                 => $file_mode,
+      profile_file         => $profile_file,
+      profile_template     => $profile_template,
+      bashrc_file          => $bashrc_file,
+      bashrc_template      => $bashrc_template,
+      aliases_file         => $aliases_file,
+      alias_template       => $alias_template,
+      aliases              => $aliases,
+      ssh_dir              => $ssh_dir,
+      ssh_dir_mode         => $ssh_dir_mode,
+      ssh_key_type         => $ssh_key_type,
+      public_ssh_key_mode  => $public_ssh_key_mode,
+      public_ssh_key       => $public_ssh_key,
+      private_ssh_key_mode => $private_ssh_key_mode,
+      private_ssh_key      => $private_ssh_key,
+      known_hosts          => $known_hosts,
+      label                => $label,
+      email                => $email,
+      editor               => $editor,
+      umask                => $umask,
+      use_color            => $use_color,
+      prompt               => $prompt,
+      require              => Corl::User[$definition_name]
+    }
   }
 
   #---
